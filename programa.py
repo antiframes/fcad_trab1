@@ -7,11 +7,63 @@ class Gate:
         self.output = output
         
 gates = []
-cnf=[]
+gates.append(Gate("nand",[6,7],1))
+gates.append(Gate("nor",[7,8],2))
+gates.append(Gate("not",[1],3))
+gates.append(Gate("or",[1,2],4))
+gates.append(Gate("and",[3,4],5))
+output=5
 
-gates.append(Gate("nand2",[6,7],1))
-gates.append(Gate("nor2",[7,8],2))
-gates.append(Gate("not1",[1],3))
-gates.append(Gate("or2",[1,2],4))
-gates.append(Gate("and2",[3,4],5))
 
+#Gerar CNF
+
+phi=[[output]]
+
+
+for gate in gates:
+    
+    if gate.gate=="or":
+        for i in range(len(gate.inputs)):
+            phi.append([-gate.inputs[i] , gate.output])
+        last = []
+        for i in range(len(gate.inputs)):
+            last.append(gate.inputs[i])
+        last.append(-gate.output)
+        phi.append(last)
+        
+    elif gate.gate=="not":
+        phi.append([gate.inputs[0] , gate.output])
+        phi.append([-gate.inputs[0] , -gate.output])
+                   
+    elif gate.gate=="and":
+        for i in range(len(gate.inputs)):
+            phi.append([gate.inputs[i] , -gate.output])
+        last = []
+        for i in range(len(gate.inputs)):
+            last.append(-gate.inputs[i])
+        last.append(gate.output)
+        phi.append(last)
+
+    elif gate.gate=="nor":
+        for i in range(len(gate.inputs)):
+            phi.append([-gate.inputs[i] , -gate.output])
+        last = []
+        for i in range(len(gate.inputs)):
+            last.append(gate.inputs[i])
+        last.append(gate.output)
+        phi.append(last)
+
+                    
+    elif gate.gate=="nand":
+        for i in range(len(gate.inputs)):
+            phi.append([gate.inputs[i] , gate.output])
+        last = []
+        for i in range(len(gate.inputs)):
+            last.append(-gate.inputs[i])
+        last.append(-gate.output)
+        phi.append(last)
+
+#print(phi)
+
+#RESOLVER SAT
+print(pycosat.solve(phi))
