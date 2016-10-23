@@ -63,6 +63,18 @@ for gate in gates:
         last.append(-gate.output)
         phi.append(last)
 
+    elif gate=="xor":
+        phi.append([-gate.inputs[0] , -gate.inputs[1] ,-gate.output])
+        phi.append([gate.inputs[0] , gate.inputs[1] ,-gate.output])
+        phi.append([gate.inputs[0] , -gate.inputs[1] ,gate.output])
+        phi.append([-gate.inputs[0] , gate.inputs[1] ,gate.output])
+
+    elif gate=="xnor":
+        phi.append([-gate.inputs[0] , -gate.inputs[1] ,gate.output])
+        phi.append([gate.inputs[0] , gate.inputs[1] ,gate.output])
+        phi.append([gate.inputs[0] , -gate.inputs[1] ,-gate.output])
+        phi.append([-gate.inputs[0] , gate.inputs[1] ,-gate.output])
+
 #print(phi)
 
 #RESOLVER SAT
