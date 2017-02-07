@@ -28,6 +28,9 @@ def getId2(var):
 		n= n[1].split("]")
 		return n[0]
 #usado para outputs
+	if v_in.find("n") != -1:
+		n= v_in.split("n")
+		return n[1]
 	return str(v_in)
 
 def getGate(var):
