@@ -67,11 +67,12 @@ def main(argv):
 	c1 = Circuit()
 	c1.add_input(netlist1.inputs)	
 	c1.add_output(netlist1.outputs)	
-	
+
 	for gate in netlist1.gates:
 		c1.add_gate(Gate(gate[0],gate[1],gate[2]))
 
 	c2 = Circuit()
+
 	c2.add_input(netlist2.inputs)
 	c2.add_output(netlist2.outputs)
 	for gate in netlist2.gates:
@@ -123,8 +124,6 @@ def main(argv):
 		final_gates.append(gate)
 
 	#Gerar CNF
-	for gate in final_gates:
-		print gate.gate
 	phi=[[additional]]
 
 
