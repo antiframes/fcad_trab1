@@ -59,22 +59,22 @@ class Gate:
 
 def main(argv):
 	arqC1 = open(argv[0], 'r')
-	c3 = netlist.Netlist(arqC1)
+	netlist1 = netlist.Netlist(arqC1)
 	
 	arqC2 = open(argv[1], 'r')
-	c4 = netlist.Netlist(arqC2)
+	netlist2 = netlist.Netlist(arqC2)
 
 	c1 = Circuit()
-	c1.add_input(c4.inputs)	
-	c1.add_output(c4.outputs)	
+	c1.add_input(netlist1.inputs)	
+	c1.add_output(netlist1.outputs)	
 	
-	for gate in c3.gates:
+	for gate in netlist1.gates:
 		c1.add_gate(Gate(gate[0],gate[1],gate[2]))
 
 	c2 = Circuit()
-	c2.add_input(c3.inputs)
-	c2.add_output(c3.outputs)
-	for gate in c4.gates:
+	c2.add_input(netlist2.inputs)
+	c2.add_output(netlist2.outputs)
+	for gate in netlist2.gates:
 		c2.add_gate(Gate(gate[0],gate[1],gate[2]))
 	
 
@@ -123,7 +123,8 @@ def main(argv):
 		final_gates.append(gate)
 
 	#Gerar CNF
-
+	for gate in final_gates:
+		print gate.gate
 	phi=[[additional]]
 
 
@@ -181,8 +182,8 @@ def main(argv):
 		    phi.append([gate.inputs[0] , -gate.inputs[1] ,-gate.output])
 		    phi.append([-gate.inputs[0] , gate.inputs[1] ,-gate.output])
 
-	#for gate in final_gates:
-		#print("gate",gate.inputs,gate.output);
+	for gate in final_gates:
+		print("gate",gate.gate, gate.inputs,gate.output);
 	#RESOLVER SAT
 	print(pycosat.solve(phi))
 

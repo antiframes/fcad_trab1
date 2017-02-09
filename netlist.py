@@ -2,18 +2,22 @@ import re
 import sys
 
 lembrete = ""
+vetEntSai = {}
+vetEntSai['\\'] = -1
 
-def getId(var, lem):
+def getIdES(var, lem):
 	global lembrete
+	global vetEntSai
 	ret = []
 	for n in var:
-		# Lembrete usado para os finais de linha com \
 		if n.find("\\") != -1:
 			lembrete = "m"+lem
 		else:
-			n= n.split("_")
-			ret.append(int(n[1]))
+			if n not in vetEntSai.keys():
+				vetEntSai[n] = len(vetEntSai)
+			ret.append(vetEntSai[n])
 	return ret
+
 
 def getId2(var):
 	v_in = re.search("=(.*)", var)
@@ -34,13 +38,18 @@ def getId2(var):
 	return str(v_in)
 
 def getGate(var):
+	global vetEntSai
 	gate = var[0][:-1]
 	ret = []
 	tmp = int
 	tmp2 = []
 	n_in = int(var[0][-1])
 	for x in range(n_in+1):
-		tmp= getId2(var[x+1])
+		v_in = re.search("=(.*)", var[x+1])
+		v_in = v_in.group(1)
+		if v_in not in vetEntSai.keys():
+				vetEntSai[v_in] = len(vetEntSai)
+		tmp= vetEntSai[v_in]
 		tmp2.append(int(tmp))
 	tmp2.pop(n_in)
 	return (gate, tmp2, int(tmp))
@@ -68,10 +77,10 @@ class Netlist:
 			if type == 'model':
 				self.id = list[1]
 			elif type == 'inputs':
-				r = getId(list[1:],"i")
+				r = getIdES(list[1:],"i")
 				self.inputs = self.inputs+r
 			elif type == 'outputs':
-				r = getId(list[1:],"o")
+				r = getIdES(list[1:],"o")
 				self.outputs = self.outputs+r
 			elif type == 'gate':
 				r = getGate(list[1:])
@@ -82,11 +91,11 @@ class Netlist:
 				if lembrete.find("m") != -1:
 					if lembrete.find("i")!= -1:
 						lembrete=""
-						r = getId(list[1:],"i")
+						r = getIdES(list[1:],"i")
 						self.inputs = self.inputs+r
 					if lembrete.find("o")!= -1:
 						lembrete=""
-						r = getId(list[1:],"o")
+						r = getIdES(list[1:],"o")
 						self.outputs = self.outputs+r
 			
 
