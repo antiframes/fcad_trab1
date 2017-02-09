@@ -36,11 +36,11 @@ class Netlist:
 				if self.lembrete.find("m") != -1:
 					if self.lembrete.find("i")!= -1:
 						self.lembrete=""
-						r = self.getIdES(list[1:],"i")
+						r = self.getIdES(list,"i")
 						self.inputs = self.inputs+r
 					if self.lembrete.find("o")!= -1:
 						self.lembrete=""
-						r = self.getIdES(list[1:],"o")
+						r = self.getIdES(list,"o")
 						self.outputs = self.outputs+r
 
 	def getIdES(self, var, lem):
