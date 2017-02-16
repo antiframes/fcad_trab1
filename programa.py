@@ -17,7 +17,7 @@ class Circuit:
     def refactor_num(self,num, is_odd):
         foo = num*2
         if is_odd:
-            foo +=1
+            foo -=1
         return foo
     def refactor(self,is_odd):
         for gate in self.gates:
@@ -78,7 +78,6 @@ def main(argv):
 	for gate in netlist2.gates:
 		c2.add_gate(Gate(gate[0],gate[1],gate[2]))
 	
-
 	#gera ids únicos para evitar repetição
 	c1.refactor(True)
 	c2.refactor(False)
@@ -106,7 +105,9 @@ def main(argv):
 	#refatora um circuito para receber as mesmas entradas do primeiro
 	c2.remap_inputs(c1.inputs)
 
-
+	
+    
+	
 	final_gates=[]#portas a serem verificadas no SAT
 	final_gate_inputs=[]#entradas para o OR da última porta
 	#adiciona XOR's
@@ -122,6 +123,8 @@ def main(argv):
 		
 	for gate in c2.gates:
 		final_gates.append(gate)
+		
+		
 
 	#Gerar CNF
 	phi=[[additional]]
@@ -137,7 +140,7 @@ def main(argv):
 		    last.append(-gate.output)
 		    phi.append(last)
 		    
-		elif gate.gate=="not":
+		elif gate.gate=="inv":
 		    phi.append([gate.inputs[0] , gate.output])
 		    phi.append([-gate.inputs[0] , -gate.output])
 		               
@@ -181,10 +184,15 @@ def main(argv):
 		    phi.append([gate.inputs[0] , -gate.inputs[1] ,-gate.output])
 		    phi.append([-gate.inputs[0] , gate.inputs[1] ,-gate.output])
 
-	for gate in final_gates:
-		print("gate",gate.gate, gate.inputs,gate.output);
+	#for gate in final_gates:
+		#print("gate",gate.gate, gate.inputs,gate.output)
 	#RESOLVER SAT
-	print(pycosat.solve(phi))
+	answer = pycosat.solve(phi)
+	
+	if (answer!="UNSAT"):
+		print("INCOMPATÍVEIS")
+	else:
+		print("COMPATÍVEIS")
 
 if __name__ == "__main__":	
 	main(sys.argv[1:])
