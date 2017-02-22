@@ -54,6 +54,16 @@ class Netlist:
 				ret.append(self.vetEntSai[n])
 		return ret
 
+	def get_output_id(self):
+		ret = []
+		for x in self.outputs: 
+			for m in self.vetEntSai:
+				if 	((self.vetEntSai[m])==x):
+					ret.append(m)
+					break
+		return ret
+
+
 	def getGate(self, var):
 		gate = var[0][:-1]
 		ret = []

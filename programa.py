@@ -15,7 +15,12 @@ class Circuit:
         self.inputs=self.inputs+inp
     def add_output(self,output):
         self.outputs=self.outputs+output
+
+    def add_orig_outputsID(self,output):
         self.orig_outputs=self.orig_outputs+output
+
+    def get_output_id(self, i):
+		return self.orig_outputs[i]
     def refactor_num(self,num, is_odd):
         foo = num*2
         if is_odd:
@@ -50,7 +55,7 @@ class Circuit:
                 j = self.input_index(gate.inputs[i])
                 if j>-1:
                     gate.inputs[i] = other_inputs[j]
-        
+
 
 class Gate:
     def __init__(self,gate,inputs,output):
@@ -58,9 +63,6 @@ class Gate:
         self.inputs = inputs
         self.output = output
         
-
-def get_output_id(gate,index):
-    return "foo"
 
 
 def main(argv):
@@ -73,6 +75,8 @@ def main(argv):
 	c1 = Circuit()
 	c1.add_input(netlist1.inputs)	
 	c1.add_output(netlist1.outputs)	
+	c1.add_orig_outputsID(netlist1.get_output_id())
+
 
 	for gate in netlist1.gates:
 		c1.add_gate(Gate(gate[0],gate[1],gate[2]))
@@ -81,6 +85,8 @@ def main(argv):
 
 	c2.add_input(netlist2.inputs)
 	c2.add_output(netlist2.outputs)
+	c2.add_orig_outputsID(netlist2.get_output_id())
+
 	for gate in netlist2.gates:
 		c2.add_gate(Gate(gate[0],gate[1],gate[2]))
 	
@@ -198,10 +204,14 @@ def main(argv):
 	if (answer!="UNSAT"):
 		print("INCOMPATÍVEIS")
 		for i in range(len(c1.outputs)):
+#			print c1.orig_outputs[i]
+#			print c2.orig_outputs[i]
 			s1=answer[c1.outputs[i]+1]>=0
 			s2=answer[c2.outputs[i]+1]>=0
-			if (s1 xor s2 == 1):
-				print("Saída",get_output_id(c1,c1.orig_outputs(i)),"não bate")
+			print s1, " : " , s2
+			if ((s1 ^ s2 )== 1):
+				print("Saída do Circuito 1: ",c1.orig_outputs[i] , " e Circuito 2: " ,c2.orig_outputs[i]," não batem")
+
 	else:
 		print("COMPATÍVEIS")
 
