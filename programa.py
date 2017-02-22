@@ -8,12 +8,14 @@ class Circuit:
         self.inputs=[]
         self.gates=[]
         self.outputs=[]
+        self.orig_outputs=[]
     def add_gate(self,gate):
         self.gates.append(gate)
     def add_input(self,inp):
         self.inputs=self.inputs+inp
     def add_output(self,output):
         self.outputs=self.outputs+output
+        self.orig_outputs=self.orig_outputs+output
     def refactor_num(self,num, is_odd):
         foo = num*2
         if is_odd:
@@ -55,6 +57,10 @@ class Gate:
         self.gate=gate
         self.inputs = inputs
         self.output = output
+        
+
+def get_output_id(gate,index):
+    return "foo"
 
 
 def main(argv):
@@ -191,6 +197,11 @@ def main(argv):
 	
 	if (answer!="UNSAT"):
 		print("INCOMPATÍVEIS")
+		for i in range(len(c1.outputs)):
+			s1=answer[c1.outputs[i]+1]>=0
+			s2=answer[c2.outputs[i]+1]>=0
+			if (s1 xor s2 == 1):
+				print("Saída",get_output_id(c1,c1.orig_outputs(i)),"não bate")
 	else:
 		print("COMPATÍVEIS")
 
