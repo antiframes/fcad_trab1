@@ -206,11 +206,11 @@ def main(argv):
 		for i in range(len(c1.outputs)):
 #			print c1.orig_outputs[i]
 #			print c2.orig_outputs[i]
-			s1=answer[c1.outputs[i]+1]>=0
-			s2=answer[c2.outputs[i]+1]>=0
+			s1=answer[c1.outputs[i]]>=0
+			s2=answer[c2.outputs[i]]>=0
 			print s1, " : " , s2
 			if ((s1 ^ s2 )== 1):
-				print("Saída do Circuito 1: ",c1.orig_outputs[i] , " e Circuito 2: " ,c2.orig_outputs[i]," não batem")
+				print("Saida do Circuito 1: ",c1.orig_outputs[i] , " e Circuito 2: " ,c2.orig_outputs[i]," nao batem")
 
 	else:
 		print("COMPATÍVEIS")
