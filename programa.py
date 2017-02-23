@@ -76,6 +76,7 @@ def main(argv):
 	c1.add_input(netlist1.inputs)	
 	c1.add_output(netlist1.outputs)	
 	c1.add_orig_outputsID(netlist1.get_output_id())
+	
 
 
 	for gate in netlist1.gates:
@@ -93,7 +94,6 @@ def main(argv):
 	#gera ids únicos para evitar repetição
 	c1.refactor(True)
 	c2.refactor(False)
-
 
 	#se número de saídas for diferente, encerra programa
 	if len(c1.inputs) != len(c2.inputs):
@@ -204,11 +204,9 @@ def main(argv):
 	if (answer!="UNSAT"):
 		print("INCOMPATÍVEIS")
 		for i in range(len(c1.outputs)):
-#			print c1.orig_outputs[i]
-#			print c2.orig_outputs[i]
-			s1=answer[c1.outputs[i]]>=0
-			s2=answer[c2.outputs[i]]>=0
-			print s1, " : " , s2
+			s1=answer[c1.outputs[i]-1]>=0
+			s2=answer[c2.outputs[i]-1]>=0
+		#	print s1, " : " , s2
 			if ((s1 ^ s2 )== 1):
 				print("Saida do Circuito 1: ",c1.orig_outputs[i] , " e Circuito 2: " ,c2.orig_outputs[i]," nao batem")
 
